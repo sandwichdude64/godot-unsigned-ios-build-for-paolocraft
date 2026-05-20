@@ -47,12 +47,12 @@ jobs:
           unzip -q templates.zip
           cp templates/ios.zip "$templates_root/ios.zip"
 
-      # 3. Import assets and Export preset -> Xcode project (FORCED HEADLESS PRE-IMPORT)
+      # 3. Import assets and Export preset -> Xcode project (NATIVE HEADLESS IMPORT)
       - name: Export to Xcode project
         run: |
           mkdir -p build/ios
-          # Force Godot to import all resources first
-          godot/Godot.app/Contents/MacOS/Godot --headless --path ./voxel-game-demo --editor --quit || true
+          # Force Godot to explicitly compile project assets from scratch
+          godot/Godot.app/Contents/MacOS/Godot --headless --path ./voxel-game-demo --import || true
           # Run the actual export
           godot/Godot.app/Contents/MacOS/Godot --headless --path ./voxel-game-demo \
             --export-release "${IOS_PRESET}" build/ios/${NAME}.xcodeproj
@@ -70,6 +70,7 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
+
 
 
 
