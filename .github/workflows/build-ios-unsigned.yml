@@ -38,10 +38,10 @@ jobs:
             -o godot.zip
           unzip -q godot.zip -d godot
 
-      # 2. Download and install official iOS export templates dynamically
+      # 2. Download and install official iOS export templates dynamically (FIXED DOT PATH)
       - name: Install iOS export template
         run: |
-          templates_root="$HOME/Library/Application Support/Godot/export_templates/${GODOT_VERSION}"
+          templates_root="$HOME/Library/Application Support/Godot/export_templates/4.4.1.stable"
           mkdir -p "$templates_root"
           curl -L "https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_export_templates.tpz" -o templates.zip
           unzip -q templates.zip
@@ -67,6 +67,7 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
+
 
 
             | xcpretty
