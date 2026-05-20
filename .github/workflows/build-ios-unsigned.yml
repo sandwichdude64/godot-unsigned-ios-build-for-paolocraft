@@ -38,12 +38,14 @@ jobs:
             -o godot.zip
           unzip -q godot.zip -d godot
 
-      # 2. Copy iOS export template from repo folder
+      # 2. Download and install official iOS export templates dynamically
       - name: Install iOS export template
         run: |
-          templates_root="$HOME/Library/Application Support/Godot/export_templates"
+          templates_root="$HOME/Library/Application Support/Godot/export_templates/${GODOT_VERSION}"
           mkdir -p "$templates_root"
-          cp -R "export_templates/." "$templates_root/"
+          curl -L "https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_export_templates.tpz" -o templates.zip
+          unzip -q templates.zip
+          cp templates/templates/ios.zip "$templates_root/ios.zip"
 
       # 3. Export preset -> Xcode project (CHANGED `--path .` TO `--path voxel-game-demo`)
       - name: Export to Xcode project
