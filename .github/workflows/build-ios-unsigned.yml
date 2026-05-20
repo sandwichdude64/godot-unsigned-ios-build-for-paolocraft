@@ -47,13 +47,11 @@ jobs:
           unzip -q templates.zip
           cp templates/ios.zip "$templates_root/ios.zip"
 
-      # 3. Export preset -> Xcode project (SMART PATH FINDER)
+      # 3. Export preset -> Xcode project (DIRECT PATH)
       - name: Export to Xcode project
         run: |
           mkdir -p build/ios
-          REAL_PATH=$(find . -name "project.godot" -exec dirname {} \;)
-          echo "Found project.godot at: $REAL_PATH"
-          godot/Godot.app/Contents/MacOS/Godot --headless --path "$REAL_PATH" \
+          godot/Godot.app/Contents/MacOS/Godot --headless --path ./voxel-game-demo \
             --export-release "${IOS_PRESET}" build/ios/${NAME}.xcodeproj
 
       # 4. Build unsigned archive
