@@ -45,7 +45,7 @@ jobs:
           mkdir -p "$templates_root"
           curl -L "https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_export_templates.tpz" -o templates.zip
           unzip -q templates.zip
-          cp templates/templates/ios.zip "$templates_root/ios.zip"
+          cp templates/ios.zip "$templates_root/ios.zip"
 
       # 3. Export preset -> Xcode project (CHANGED `--path .` TO `--path voxel-game-demo`)
       - name: Export to Xcode project
@@ -67,6 +67,7 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
+
 
             | xcpretty
 
