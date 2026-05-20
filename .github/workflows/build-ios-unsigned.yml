@@ -47,11 +47,13 @@ jobs:
           unzip -q templates.zip
           cp templates/ios.zip "$templates_root/ios.zip"
 
-      # 3. Export preset -> Xcode project (Clean relative directory)
+      # 3. Export preset -> Xcode project (SMART PATH FINDER)
       - name: Export to Xcode project
         run: |
           mkdir -p build/ios
-          godot/Godot.app/Contents/MacOS/Godot --headless --path . \
+          REAL_PATH=$(find . -name "project.godot" -exec dirname {} \;)
+          echo "Found project.godot at: $REAL_PATH"
+          godot/Godot.app/Contents/MacOS/Godot --headless --path "$REAL_PATH" \
             --export-release "${IOS_PRESET}" build/ios/${NAME}.xcodeproj
 
       # 4. Build unsigned archive
@@ -67,6 +69,7 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
+
 
 
             | xcpretty
