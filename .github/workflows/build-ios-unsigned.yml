@@ -47,20 +47,20 @@ jobs:
           unzip -q templates.zip
           cp templates/ios.zip "$templates_root/ios.zip"
 
-      # 3. Export preset -> Xcode project (CHANGED TARGET TO LOCAL PATH)
+      # 3. Export preset -> Xcode project (Clean relative directory)
       - name: Export to Xcode project
         run: |
-          mkdir -p voxel-game-demo/build/ios
-          godot/Godot.app/Contents/MacOS/Godot --headless --path voxel-game-demo \
+          mkdir -p build/ios
+          godot/Godot.app/Contents/MacOS/Godot --headless --path . \
             --export-release "${IOS_PRESET}" build/ios/${NAME}.xcodeproj
 
       # 4. Build unsigned archive
       - name: xcodebuild archive (unsigned)
         run: |
           xcodebuild archive \
-            -project voxel-game-demo/build/ios/${NAME}.xcodeproj \
+            -project build/ios/${NAME}.xcodeproj \
             -scheme "${NAME}" \
-            -archivePath voxel-game-demo/build/ios/App.xcarchive \
+            -archivePath build/ios/App.xcarchive \
             -configuration Release \
             CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="" \
@@ -69,17 +69,16 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
 
 
-
             | xcpretty
 
       # 5. Package .ipa
       - name: Package IPA
         run: |
-          cd voxel-game-demo/build/ios
+          cd build/ios
           mkdir -p Payload
           cp -R App.xcarchive/Products/Applications/*.app Payload/
           zip -r "${NAME}.ipa" Payload
-          mv "${NAME}.ipa" ../../../
+          mv "${NAME}.ipa" ../../
 
       # 6. Publish artifact
       - name: Upload IPA artifact
