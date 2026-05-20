@@ -47,12 +47,12 @@ jobs:
           unzip -q templates.zip
           cp templates/ios.zip "$templates_root/ios.zip"
 
-      # 3. Export preset -> Xcode project (FIXED BUILD PATH CREATION)
+      # 3. Export preset -> Xcode project (CHANGED TARGET TO LOCAL PATH)
       - name: Export to Xcode project
         run: |
           mkdir -p voxel-game-demo/build/ios
           godot/Godot.app/Contents/MacOS/Godot --headless --path voxel-game-demo \
-            --export-release "${IOS_PRESET}" voxel-game-demo/build/ios/${NAME}.xcodeproj
+            --export-release "${IOS_PRESET}" build/ios/${NAME}.xcodeproj
 
       # 4. Build unsigned archive
       - name: xcodebuild archive (unsigned)
@@ -67,6 +67,7 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
+
 
 
             | xcpretty
